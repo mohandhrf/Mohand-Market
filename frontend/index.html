@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛒 Mohand Market</title>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <!-- En-tête -->
+    <header class="header">
+        <div class="header-left">
+            <button onclick="toggleDarkMode()">🌙 Mode sombre</button>
+        </div>
+        <h1>🛒 Mohand Market</h1>
+        <div class="header-right">
+            <span id="currentDate">📅</span>
+            <span id="currentTime">⏰</span>
+        </div>
+    </header>
+
+    <!-- Section principale -->
+    <main>
+        <!-- Boutons d'action -->
+        <div class="action-buttons">
+            <button onclick="addNewLine()">➕ Nouvelle ligne</button>
+            <button onclick="resetTable()">🔄 Réinitialiser</button>
+            <button onclick="scanBarcode()">📷 Scanner code-barres</button>
+            <button id="historyButton">📊 Historique</button> <!-- Nouvelle icône -->
+            <button onclick="openAddProductModal()">📦 Ajouter Produit</button>
+        </div>
+
+        <!-- Tableau des produits -->
+        <div class="table-section">
+            <table id="productTable">
+                <thead>
+                    <tr>
+                        <th>Code-Barres</th>
+                        <th>Produit</th>
+                        <th>Prix unitaire (€)</th>
+                        <th>Quantité</th>
+                        <th>Total (€)</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Les lignes seront ajoutées dynamiquement -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Résumé flottant -->
+        <div class="floating-summary">
+            <div>
+                <strong>💰 Total Général:</strong>
+                <span id="totalGeneral">€ 0.00</span>
+            </div>
+            <div class="payment-method">
+                <label><input type="radio" name="paymentMethod" value="cash" checked onclick="updatePaymentMethod()"> 💵 Liquide</label>
+                <label><input type="radio" name="paymentMethod" value="card" onclick="updatePaymentMethod()"> 💳 Carte</label>
+            </div>
+            <div id="cash-payment">
+                <label for="amountGiven">💵 Montant versé par le client (€):</label>
+                <input type="number" id="amountGiven" oninput="calculateChange()">
+            </div>
+            <div id="changeAmountDiv">
+                <strong>💵 Monnaie à restituer:</strong>
+                <span id="changeAmount">€ 0.00</span>
+            </div>
+            <div class="action-buttons">
+                <button class="validate-button" onclick="validatePurchase()">✅ Valider l'achat</button>
+                <button class="print-button" onclick="printReceipt()">🖨️ Imprimer</button>
+            </div>
+        </div>
+
+        <!-- Modal pour l'historique -->
+        <div id="historyModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Historique d'achats</h2>
+                <table id="historyTable">
+                    <thead>
+                        <tr>
+                            <th>Numéro de ticket</th>
+                            <th>Total (€)</th>
+                            <th>Date</th>
+                            <th>Heure</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Les données seront injectées ici dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Modal pour Ajouter un Produit -->
+        <div id="addProductModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddProductModal()">&times;</span>
+                <h2><i class="fas fa-box"></i> Ajouter un Produit</h2>
+                <form id="addProductForm">
+                    <div class="form-group">
+                        <label for="productName"><i class="fas fa-tag"></i> Nom du produit :</label>
+                        <input type="text" id="productName" name="productName" placeholder="Entrez le nom du produit" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productPrice"><i class="fas fa-dollar-sign"></i> Prix (€) :</label>
+                        <input type="number" step="0.01" id="productPrice" name="productPrice" placeholder="Entrez le prix" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="productBarcode"><i class="fas fa-barcode"></i> Code-barres :</label>
+                        <input type="text" id="productBarcode" name="productBarcode" placeholder="Entrez le code-barres" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" onclick="closeAddProductModal()">Annuler</button>
+                        <button type="button" onclick="addProductToBackend()">
+                            <i class="fas fa-plus-circle"></i> Ajouter
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Pied de page -->
+    <footer class="footer">
+        <div class="footer-left">
+            <button id="guideButton">📊 Guide</button> <!-- Bouton Guide -->
+        </div>
+    </footer>
+
+    <!-- Modal pour le guide des codes-barres -->
+    <div id="guideModal" class="modal">
+        <div class="modal-content scrollable">
+            <span class="close">&times;</span>
+            <h2>Guides des codes-barres</h2>
+            <table id="guideTable">
+                <thead>
+                    <tr>
+                        <th>Produit</th>
+                        <th>Prix (€)</th>
+                        <th>Code-barres</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Les données seront injectées dynamiquement -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="notifications" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+
+    <script>
+        function validatePurchase() {
+            const rows = document.getElementById('productTable').getElementsByTagName('tbody')[0].rows;
+            const ticketNumber = Math.floor(Math.random() * 1000000);
+            const now = new Date();
+            let purchaseDetails = [];
+
+            for (let row of rows) {
+                const productName = row.cells[1].querySelector('select')?.value || row.cells[1].textContent.trim();
+                const quantity = parseFloat(row.cells[3].querySelector('input').value) || 0;
+                const price = parseFloat(row.cells[2].textContent.replace('€ ', '')) || 0;
+
+                if (!productName || isNaN(quantity) || quantity <= 0 || isNaN(price)) {
+                    alert("Veuillez vérifier les données du tableau. Tous les champs doivent être remplis.");
+                    return;
+                }
+
+                const total = price * quantity;
+                purchaseDetails.push({
+                    ticketNumber,
+                    productName,
+                    quantity,
+                    price,
+                    total,
+                    date: now.toLocaleDateString('fr-FR'),
+                    time: now.toLocaleTimeString('fr-FR')
+                });
+            }
+
+            if (purchaseDetails.length === 0) {
+                alert("Aucun produit sélectionné !");
+                return;
+            }
+
+            sendPurchaseToBackend(purchaseDetails, ticketNumber);
+        }
+
+        async function sendPurchaseToBackend(purchaseDetails, ticketNumber) {
+            try {
+                const response = await fetch('http://127.0.0.1:8080/api/transactions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(purchaseDetails),
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log("Transactions enregistrées:", result);
+                    resetTable();
+                    alert(`Achat validé ! Numéro de ticket : #${ticketNumber}`);
+                } else {
+                    let errorMessage = "Erreur inconnue.";
+                    try {
+                        const errorData = await response.json();
+                        errorMessage = errorData.message || errorMessage;
+                    } catch (parseError) {
+                        console.error("Réponse invalide du backend:", parseError);
+                    }
+                    console.error("Erreur lors de l'enregistrement des transactions:", errorMessage);
+                    alert(`Erreur: ${errorMessage}`);
+                }
+            } catch (error) {
+                console.error("Erreur réseau:", error);
+                alert("Erreur réseau. Veuillez réessayer.");
+            }
+        }
+
+        function resetTable() {
+            const table = document.getElementById('productTable').getElementsByTagName('tbody')[0];
+            table.innerHTML = '';
+            document.getElementById('totalGeneral').textContent = '€ 0.00';
+            document.getElementById('amountGiven').value = '';
+            document.getElementById('changeAmount').textContent = '€ 0.00';
+            showNotification("Tableau réinitialisé.");
+        }
+    </script>
+</body>
+</html>

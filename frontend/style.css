@@ -1,0 +1,708 @@
+/* Variables globales */
+:root {
+    --primary-color: #4caf50; /* Vert principal */
+    --secondary-color: #ffffff; /* Blanc pur */
+    --accent-color: #ff9800; /* Orange vibrant */
+    --dark-bg: #1e1e1e; /* Fond sombre */
+    --dark-text: #ffffff; /* Texte clair pour le mode sombre */
+    --light-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère */
+    --dark-shadow: 0 4px 6px rgba(255, 255, 255, 0.1); /* Ombre pour le mode sombre */
+    --font-primary: 'Poppins', sans-serif; /* Police principale */
+    --font-secondary: 'Roboto', sans-serif; /* Police secondaire */
+}
+
+/* Styles globaux */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2); /* Dégradé clair */
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.dark-mode {
+    background: linear-gradient(135deg, #1e1e1e, #3a3a3a); /* Dégradé sombre */
+    color: var(--dark-text);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header-left,
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-left button {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.header-left button:hover {
+    background: #45a049; /* Vert plus foncé */
+    transform: scale(1.05);
+}
+
+.header h1 {
+    text-align: center;
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-top: 10px;
+    font-family: var(--font-secondary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.header-right span {
+    font-size: 1.2rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-secondary);
+}
+
+.dark-mode .header-right span {
+    color: var(--dark-text); /* Lisibilité en mode sombre */
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.action-buttons button {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.action-buttons button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.table-section {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: var(--light-shadow);
+    font-family: 'Montserrat', sans-serif; /* Police moderne */
+    font-size: 14px; /* Taille de police ajustée */
+    text-align: center; /* Centrer tout le contenu */
+}
+
+th, td {
+    padding: 12px; /* Espacement interne équilibré */
+    border: 1px solid #ddd; /* Bordures légères pour une meilleure lisibilité */
+    text-align: center; /* Centrer le texte dans les cellules */
+}
+
+th {
+    background-color: var(--primary-color); /* Couleur d'arrière-plan pour les en-têtes */
+    color: var(--secondary-color); /* Texte blanc pour contraste */
+    font-weight: bold; /* Texte en gras pour les en-têtes */
+}
+
+td {
+    font-family: 'Montserrat', sans-serif; /* Police moderne pour les données */
+    font-size: 14px; /* Taille de police cohérente */
+}
+
+/* Amélioration visuelle pour les boutons dans le tableau */
+td button {
+    background: #e74c3c; /* Rouge vibrant pour le bouton Supprimer */
+    color: white; /* Texte blanc */
+    border: none; /* Pas de contour */
+    padding: 8px 12px; /* Espacement interne */
+    border-radius: 8px; /* Bords arrondis */
+    cursor: pointer;
+    font-size: 14px; /* Taille de police ajustée */
+    font-family: 'Montserrat', sans-serif; /* Police moderne */
+    font-weight: bold; /* Texte en gras */
+    text-transform: uppercase; /* Texte en majuscules */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; /* Espace entre l'icône et le texte */
+    transition: background-color 0.3s ease; /* Transition fluide pour l'effet de survol */
+}
+
+/* Effet de survol pour le bouton Supprimer */
+td button:hover {
+    background: #c0392b; /* Rouge légèrement plus foncé */
+    transform: scale(1.05); /* Légère augmentation de taille pour un effet dynamique */
+}
+
+.floating-summary {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--secondary-color);
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--light-shadow);
+    max-width: 350px;
+    width: 100%;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* Espacement vertical entre les éléments */
+}
+
+.dark-mode .floating-summary {
+    background: var(--dark-bg);
+    box-shadow: var(--dark-shadow);
+}
+
+.floating-summary div {
+    margin-bottom: 15px;
+}
+
+.floating-summary strong {
+    font-weight: bold;
+    font-size: 1.1rem;
+    font-family: var(--font-secondary);
+}
+
+.floating-summary span {
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+
+.floating-summary input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.floating-summary input:focus {
+    border-color: var(--primary-color);
+}
+
+.payment-method {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.payment-method label {
+    font-weight: bold;
+    font-family: var(--font-primary);
+}
+
+.payment-method input[type="radio"] {
+    margin-right: 5px;
+}
+
+/* Styles pour le bouton Valider */
+.validate-button {
+    background: var(--primary-color); /* Couleur identique aux autres boutons */
+    color: var(--secondary-color);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.validate-button:hover {
+    background: #45a049; /* Vert légèrement plus foncé */
+    transform: scale(1.05);
+}
+
+/* Styles pour le bouton Imprimer */
+.print-button {
+    background: var(--primary-color); /* Couleur identique aux autres boutons */
+    color: var(--secondary-color);
+    border: none;
+    padding: 12px 20px; /* Même espacement interne que le bouton Valider */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer;
+    font-size: 1rem; /* Même taille de police */
+    font-weight: bold; /* Texte en gras */
+    margin-top: 15px; /* Même marge supérieure */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Effets de transition */
+}
+
+.print-button:hover {
+    background: #45a049; /* Vert légèrement plus foncé */
+    transform: scale(1.05); /* Légère augmentation de taille pour un effet dynamique */
+}
+
+.floating-summary .action-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px; /* Espacement horizontal entre les boutons */
+}
+
+.floating-summary .action-buttons button {
+    flex: 1; /* Les boutons occupent un espace égal */
+    max-width: 150px; /* Limite la largeur maximale */
+}
+
+/* Styles pour le bouton Historique */
+#historyButton {
+    background: var(--primary-color); /* Utiliser la couleur verte comme les autres boutons */
+    color: var(--secondary-color); /* Texte blanc pour contraste */
+    border: none;
+    padding: 10px 20px; /* Espacement interne identique aux autres boutons */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer;
+    font-size: 1rem; /* Taille de police identique */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espace entre l'icône et le texte */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Effets de transition */
+}
+
+#historyButton:hover {
+    background: #45a049; /* Vert légèrement plus foncé pour l'effet de survol */
+    transform: scale(1.05); /* Légère augmentation de taille */
+}
+
+/* Styles pour le bouton Guide */
+#guideButton {
+    background: var(--primary-color); /* Utiliser la couleur verte comme les autres boutons */
+    color: var(--secondary-color); /* Texte blanc */
+    border: none;
+    padding: 10px 20px; /* Espacement interne identique aux autres boutons */
+    border-radius: 5px; /* Coins arrondis */
+    cursor: pointer;
+    font-size: 1rem; /* Taille de police identique */
+    display: flex;
+    align-items: center;
+    gap: 5px; /* Espace entre l'icône et le texte */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Effets de transition */
+}
+
+#guideButton:hover {
+    background: #45a049; /* Vert légèrement plus foncé pour l'effet de survol */
+    transform: scale(1.05); /* Légère augmentation de taille */
+}
+
+/* Styles pour la fenêtre modale */
+.modal {
+    display: none; /* Masquée par défaut */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: var(--secondary-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--light-shadow);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.modal-content label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: var(--dark-text);
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.modal-content button {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #000;
+}
+
+.modal-content.scrollable {
+    max-height: 80vh; /* Hauteur maximale de 80% de la fenêtre */
+    overflow-y: auto; /* Barre de défilement verticale */
+    padding: 20px; /* Espacement interne */
+    border-radius: 12px; /* Coins arrondis */
+    box-shadow: var(--light-shadow); /* Ombre légère */
+}
+
+/* Style pour la barre de défilement */
+.modal-content.scrollable::-webkit-scrollbar {
+    width: 8px; /* Largeur de la barre de défilement */
+}
+
+.modal-content.scrollable::-webkit-scrollbar-thumb {
+    background: #aaa; /* Couleur du curseur */
+    border-radius: 4px; /* Coins arrondis */
+}
+
+.modal-content.scrollable::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Couleur de l'arrière-plan */
+}
+
+.modal-content h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.modal-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.modal-content th, .modal-content td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+
+.modal-content th {
+    background-color: var(--primary-color);
+    color: var(--secondary-color);
+}
+
+/* Bouton de fermeture */
+.close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close:hover {
+    color: #000;
+}
+
+/* Styles pour la fenêtre modale */
+.modal-content h2 i {
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+.modal-content label i {
+    margin-right: 5px;
+    color: var(--accent-color);
+}
+
+.modal-content button i {
+    margin-right: 5px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.9rem;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .action-buttons button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+
+    .floating-summary {
+        position: static;
+        margin-top: 20px;
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 100%;
+    }
+}
+
+/* Styles pour les écrans mobiles */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+    }
+
+    .header h1 {
+        font-size: 1.5rem;
+    }
+
+    .action-buttons button {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+
+    table {
+        font-size: 0.9rem;
+        overflow-x: auto; /* Barre de défilement horizontale si nécessaire */
+        display: block;
+    }
+
+    th, td {
+        padding: 8px;
+        white-space: nowrap; /* Éviter le retour à la ligne */
+    }
+
+    .floating-summary {
+        position: static;
+        margin-top: 20px;
+        max-width: 100%;
+        width: 100%;
+        padding: 15px;
+    }
+
+    .footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    #guideButton {
+        width: 100%;
+        max-width: 300px;
+        padding: 12px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Masquer les colonnes moins importantes */
+    table th:nth-child(4),
+    table td:nth-child(4) {
+        display: none;
+    }
+
+    /* Simplifier les titres */
+    th {
+        font-size: 0.8rem;
+    }
+}
+
+/* Styles spécifiques pour le ticket imprimé */
+@media print {
+    body {
+        font-family: 'Poppins', sans-serif;
+        line-height: 1.6;
+        padding: 20px;
+        text-align: center; /* Centrer tout le contenu du ticket */
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 10px auto;
+        text-align: center; /* Centrer le texte dans le tableau */
+    }
+
+    th, td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: center; /* Centrer le texte dans les cellules */
+    }
+
+    th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    p {
+        text-align: center; /* Centrer tous les paragraphes */
+    }
+}
+
+/* Styles pour le pied de page */
+.footer {
+    display: flex;
+    justify-content: flex-start; /* Aligner à gauche */
+    align-items: center; /* Alignement vertical */
+    padding: 20px; /* Espacement autour du contenu */
+    background: none; /* Supprimer la barre verte */
+    color: var(--primary-color); /* Texte vert pour contraste */
+    position: fixed; /* Fixer le pied de page en bas */
+    bottom: 0; /* Coller en bas de la page */
+    width: 100%; /* Largeur complète */
+    box-shadow: none; /* Supprimer l'ombre */
+}
+
+.footer-left {
+    display: flex;
+    justify-content: flex-start; /* Aligner à gauche */
+    align-items: center; /* Alignement vertical */
+    gap: 10px; /* Espace entre les éléments */
+}
+
+/* Styles pour les groupes de formulaire */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--dark-text);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.form-group i {
+    margin-right: 5px;
+    color: var(--accent-color);
+}
+
+/* Styles pour les boutons */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.form-actions button {
+    background: var(--primary-color);
+    color: var(--secondary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.form-actions button:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+
+.form-actions button:first-child {
+    background: #e74c3c; /* Rouge pour le bouton Annuler */
+}
+
+.form-actions button:first-child:hover {
+    background: #c0392b;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .form-group input {
+        font-size: 0.9rem;
+    }
+
+    .form-actions button {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+}
